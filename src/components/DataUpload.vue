@@ -1,37 +1,36 @@
 <script setup>
-import FileUpload from 'primevue/fileupload';
 import {ref} from "vue";
 import Papa from "papaparse";
 
-const emit = defineEmits(["dataUploaded"]);
+const emit = defineEmits(['fileSelected', 'dataUploaded']);
 
 const uploading = ref(false);
-const lastModified = ref('')
-const size = ref(0)
-const type = ref('')
-const tableData = ref([]);
-const columns = ref([]);
+const data = ref([]);
 
 async function parse(event) {
   uploading.value = true
+  data.value = undefined
   const file = event.target.files[0];
-  console.log('file', file);
-  lastModified.value = new Date(file.lastModified).toString()
-  size.value = file.size
-  type.value = file.type
   if (file) {
+    emit('fileSelected',
+        {
+          lastModified: new Date(file.lastModified),
+          size: file.size,
+          type: file.type
+        }
+    )
     Papa.parse(file, {
       header: true,
       complete: (results) => {
-        console.log('result', results)
-        tableData.value = results.data;
-        if (results.data.length > 0) {
-          columns.value = Object.keys(results.data[0]).map(key => ({
-            field: key,
-            header: key.charAt(0).toUpperCase() + key.slice(1)
-          }));
-        }
-        emit('dataUploaded', { tableData, columns })
+        data.value = results.data;
+        const rowsCount = Object.keys(results.data[results.data.length - 1]).length === 1 && !results.data[results.data.length - 1][0] ? results.data.length - 1 : results.data.length
+        emit('dataUploaded',
+            {
+            values: results.data,
+            rowsCount: rowsCount,
+            columnsCount: results.meta.fields.length
+          }
+        )
         uploading.value = false
       }
     });
@@ -43,17 +42,6 @@ async function parse(event) {
   <div data-cy="dataUpload" class="card">
     <div class="card-img-overlay" style="width: 100%;">
       <input type="file" @change="parse" :disabled="uploading"/>
-      <p v-if="uploading">
-        Last Modified: {{lastModified}}
-        Size: {{size}}
-        Type: {{file}}
-      </p>
-
-<!--      <FileUpload name="data" @upload="parse()" :multiple="false" accept=".csv" :maxFileSize="1000000">-->
-<!--        <template #empty>-->
-<!--          <p class="text-center">Upload data file in CSV format.</p>-->
-<!--        </template>-->
-<!--      </FileUpload>-->
     </div>
   </div>
 </template>

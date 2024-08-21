@@ -1,20 +1,22 @@
 <script setup>
+import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+
 import {computed} from "vue";
 
 const props = defineProps({
-  tableData: {
+  data: {
     required: true
   },
-  columns: {
+  fileDetails: {
     required: true
   }
 })
 
-const data = computed(() => {
+const summary = computed(() => {
   const result = []
-  const dataByKey = props.tableData.reduce((acc, cur) => {
+  const dataByKey = props.data.values.reduce((acc, cur) => {
     for (const [key, value] of Object.entries(cur)) {
       if (!acc[key]) acc[key] = []
       acc[key].push(value)
@@ -48,8 +50,19 @@ const columns = [
 
 <template>
   <div>
-    <DataTable :value="data">
-      <Column v-for="(col, index) in columns" :field="col.field" :header="col.header" :key="index" sortable />
+    <Card>
+      <template #title>File Details</template>
+      <template #content>
+        <p class="m-0">Last Modified: {{fileDetails.lastModified}}</p>
+        <p class="m-0">Size: {{fileDetails.size}}</p>
+        <p class="m-0">Type: {{fileDetails.type}}</p>
+        <p class="m-0">Rows Count: {{data.rowsCount}}</p>
+        <p class="m-0">Columns Count: {{data.columnsCount}}</p>
+      </template>
+    </Card>
+
+    <DataTable :value="summary">
+      <Column v-for="(col, index) in columns" :field="col.field" :header="col.header" :key="index" />
     </DataTable>
   </div>
 </template>
