@@ -1,5 +1,5 @@
 <script setup>
-import Card from 'primevue/card';
+import Tag from 'primevue/tag';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
@@ -7,9 +7,6 @@ import {computed} from "vue";
 
 const props = defineProps({
   data: {
-    required: true
-  },
-  fileDetails: {
     required: true
   }
 })
@@ -50,16 +47,9 @@ const columns = [
 
 <template>
   <div>
-    <Card>
-      <template #title>File Details</template>
-      <template #content>
-        <p class="m-0">Last Modified: {{fileDetails.lastModified}}</p>
-        <p class="m-0">Size: {{fileDetails.size}}</p>
-        <p class="m-0">Type: {{fileDetails.type}}</p>
-        <p class="m-0">Rows Count: {{data.rowsCount}}</p>
-        <p class="m-0">Columns Count: {{data.columnsCount}}</p>
-      </template>
-    </Card>
+    <Tag icon="pi pi-cog" severity="contrast" :value="`Rows Count: ${data.rowsCount}`"></Tag> &nbsp;
+    <Tag icon="pi pi-cog" severity="contrast" :value="`Columns Count: ${data.columnsCount}`"></Tag>
+    <br/>
 
     <DataTable :value="summary">
       <Column v-for="(col, index) in columns" :field="col.field" :header="col.header" :key="index" />

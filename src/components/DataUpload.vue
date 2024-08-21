@@ -1,11 +1,14 @@
 <script setup>
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import Papa from "papaparse";
 
 const emit = defineEmits(['fileSelected', 'dataUploaded']);
 
 const uploading = ref(false);
-const data = ref([]);
+const parsingResults = ref()
+const data = computed(() => parsingResults.value.data)
+const rowsCount = computed(() => Object.keys(data.value[data.value.length - 1]).length === 1 && !data.value[data.value.length - 1][0] ? data.value.length - 1 : data.value.length)
+const columnsCount = computed(() => parsingResults.value.meta.fields.length)
 
 async function parse(event) {
   uploading.value = true
@@ -22,13 +25,12 @@ async function parse(event) {
     Papa.parse(file, {
       header: true,
       complete: (results) => {
-        data.value = results.data;
-        const rowsCount = Object.keys(results.data[results.data.length - 1]).length === 1 && !results.data[results.data.length - 1][0] ? results.data.length - 1 : results.data.length
+        parsingResults.value = results;
         emit('dataUploaded',
             {
-            values: results.data,
-            rowsCount: rowsCount,
-            columnsCount: results.meta.fields.length
+            values: data.value,
+            rowsCount: rowsCount.value,
+            columnsCount: columnsCount.value
           }
         )
         uploading.value = false
