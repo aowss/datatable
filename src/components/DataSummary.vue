@@ -1,10 +1,10 @@
 <script setup>
-import Tag from 'primevue/tag';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import PercentageComponent from "@/components/PercentageComponent.vue";
+import Tag from 'primevue/tag'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import PercentageComponent from '@/components/PercentageComponent.vue'
 
-import {computed, ref} from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   data: {
@@ -22,7 +22,7 @@ const summary = computed(() => {
     return acc
   }, {})
   for (const [key, value] of Object.entries(dataByKey)) {
-    const values = value.filter(val => val && val.trim().length > 0)
+    const values = value.filter((val) => val && val.trim().length > 0)
     const sorted = values.sort()
     const min = sorted[0]
     const max = sorted[sorted.length - 1]
@@ -34,32 +34,42 @@ const summary = computed(() => {
       range: {
         min: min,
         max: max,
-        label: uniqueValues.size === 1 ? uniqueValues.values().next().value : uniqueValues.size <= 3 ? Array.from(uniqueValues) : `From '${min.length <= 5 ? min.substring(0, 5) : min.substring(0, 5).concat('...')}' to '${max.length <= 5 ? max.substring(0, 5) : max.substring(0, 5).concat('...')}'`,
+        label:
+          uniqueValues.size === 1
+            ? uniqueValues.values().next().value
+            : uniqueValues.size <= 3
+              ? Array.from(uniqueValues)
+              : `From '${min.length <= 5 ? min.substring(0, 5) : min.substring(0, 5).concat('...')}' to '${max.length <= 5 ? max.substring(0, 5) : max.substring(0, 5).concat('...')}'`
       },
       uniqueValues: uniqueValues,
       valid: true
     })
   }
   return result
-});
+})
 </script>
 
 <template>
   <div>
     <Tag icon="pi pi-bars" severity="contrast" :value="`Row Count: ${data.rowsCount}`"></Tag> &nbsp;
-    <Tag icon="pi pi-arrows-h" severity="contrast" :value="`Column Count: ${data.columnsCount}`"></Tag> &nbsp;
-    <br/>
+    <Tag
+      icon="pi pi-arrows-h"
+      severity="contrast"
+      :value="`Column Count: ${data.columnsCount}`"
+    ></Tag>
+    &nbsp;
+    <br />
     <DataTable :value="summary" size="small" stripedRows>
-      <Column field="name" header="Name"/>
+      <Column field="name" header="Name" />
       <Column field="notEmpty" header="Has a value?">
         <template #body="slotProps">
-          <PercentageComponent :total="data.rowsCount" :count="slotProps.data.notEmpty"/>
+          <PercentageComponent :total="data.rowsCount" :count="slotProps.data.notEmpty" />
         </template>
       </Column>
-      <Column field="range.label" header="Range"/>
+      <Column field="range.label" header="Range" />
       <Column field="unique" header="Unique Values">
         <template #body="slotProps">
-          <PercentageComponent :total="data.rowsCount" :count="slotProps.data.uniqueValues.size"/>
+          <PercentageComponent :total="data.rowsCount" :count="slotProps.data.uniqueValues.size" />
         </template>
       </Column>
     </DataTable>

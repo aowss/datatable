@@ -1,24 +1,23 @@
-import "primeicons/primeicons.css";
-import './assets/main.css';
+import 'primeicons/primeicons.css'
+import './assets/main.css'
 
-import { createApp } from 'vue';
-import PrimeVue from 'primevue/config';
-import Aura from '@primevue/themes/aura';
-import App from './App.vue';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import FloatLabel from 'primevue/floatlabel';
+import PrimeVue from 'primevue/config'
+import Aura from '@primevue/themes/aura'
 
-const app = createApp(App);
+import { createApp } from 'vue'
+import App from './App.vue'
+
+const app = createApp(App)
 
 app.use(PrimeVue, {
-    theme: {
-        preset: Aura
+  theme: {
+    preset: Aura,
+    options: {
+      prefix: 'p',
+      darkModeSelector: 'system',
+      cssLayer: false
     }
-});
+  }
+})
 
-app.component('Button', Button);
-app.component('InputText', InputText);
-app.component('FloatLabel', FloatLabel);
-
-app.mount('#app');
+app.mount('#app')

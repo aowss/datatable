@@ -1,21 +1,28 @@
 {
     "name": "data-table",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+        "format": "prettier --write src/"
     },
     "dependencies": {
-        "@primevue/themes": "^4.0.0",
+        "@primevue/themes": "^4.0.4",
         "primeicons": "^7.0.0",
-        "primevue": "^4.0.0",
-        "vue": "^3.4.27",
+        "primevue": "^4.0.4",
+        "vue": "^3.4.38",
         "papaparse": "^5.4.1"
     },
     "devDependencies": {
+        "@rushstack/eslint-patch": "^1.10.4",
         "@vitejs/plugin-vue": "^5.0.5",
-        "vite": "^5.2.13"
+        "@vue/eslint-config-prettier": "^9.0.0",
+        "eslint": "^8.57.0",
+        "eslint-plugin-vue": "^9.23.0",
+        "prettier": "^3.2.5",
+        "vite": "^5.3.1"
     }
 }

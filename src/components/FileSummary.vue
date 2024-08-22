@@ -1,7 +1,7 @@
 <script setup>
-import Tag from 'primevue/tag';
+import Tag from 'primevue/tag'
 
-import {computed} from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   fileDetails: {
