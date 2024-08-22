@@ -16,8 +16,8 @@ const type = computed(() => props.fileDetails.type)
 
 <template>
   <div>
-    <Tag icon="pi pi-cog" severity="info" :value="`Last Modified: ${lastModified}`"></Tag> &nbsp;
-    <Tag icon="pi pi-cog" severity="info" :value="`Size: ${size}`"></Tag> &nbsp;
-    <Tag icon="pi pi-cog" severity="info" :value="`Type: ${type}`"></Tag>
+    <Tag icon="pi pi-clock" severity="info" :value="`Last Modified: ${lastModified}`"></Tag> &nbsp;
+    <Tag icon="pi pi-info-circle" severity="info" :value="`Size: ${size}`"></Tag> &nbsp;
+    <Tag icon="pi pi-file" severity="info" :value="`Type: ${type}`"></Tag>
   </div>
 </template>

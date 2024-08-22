@@ -18,7 +18,7 @@ const columns = computed(() => Object.keys(props.data[0])
 
 <template>
   <div>
-    <DataTable :value="data" sortMode="multiple" removableSort paginator :rows="50" :rowsPerPageOptions="[10, 50, 100]">
+    <DataTable :value="data" size="small" stripedRows sortMode="multiple" removableSort paginator :rows="50" :rowsPerPageOptions="[10, 50, 100]">
       <template #empty> No data. </template>
       <template #loading> Loading data. Please wait. </template>
       <Column v-for="(col, index) in columns" :field="col.field" :header="col.header" :key="index" sortable />
