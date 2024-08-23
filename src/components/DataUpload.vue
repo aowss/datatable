@@ -6,13 +6,21 @@ const emit = defineEmits(['fileSelected', 'dataUploaded'])
 
 const uploading = ref(false)
 const parsingResults = ref()
-const data = computed(() => parsingResults.value.data)
-const rowsCount = computed(() =>
-  Object.keys(data.value[data.value.length - 1]).length === 1 &&
-  !data.value[data.value.length - 1][0]
-    ? data.value.length - 1
-    : data.value.length
-)
+
+const data = computed(() => {
+  if (!parsingResults.value) return undefined
+  if (
+    parsingResults.value.data[parsingResults.value.data.length - 1] !== undefined &&
+    Object.keys(parsingResults.value.data[parsingResults.value.data.length - 1]).length === 1 &&
+    !parsingResults.value.data[parsingResults.value.data.length - 1][0]
+  ) {
+    console.log('empty last line')
+    return parsingResults.value.data.slice(0, -1)
+  } else {
+    return parsingResults.value.data
+  }
+})
+const rowsCount = computed(() => data.value.length)
 const columnsCount = computed(() => parsingResults.value.meta.fields.length)
 
 async function parse(event) {
@@ -27,6 +35,7 @@ async function parse(event) {
     })
     Papa.parse(file, {
       header: true,
+      dynamicTyping: true,
       complete: (results) => {
         parsingResults.value = results
         emit('dataUploaded', {

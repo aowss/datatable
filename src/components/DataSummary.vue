@@ -22,15 +22,16 @@ const summary = computed(() => {
     return acc
   }, {})
   for (const [key, value] of Object.entries(dataByKey)) {
-    const values = value.filter((val) => val && val.trim().length > 0)
-    const sorted = values.sort()
-    const min = sorted[0]
-    const max = sorted[sorted.length - 1]
-    const uniqueValues = new Set(sorted)
+    const sortedValues = value
+      .filter((val) => val && (typeof val !== 'string' || val.trim().length > 0))
+      .sort()
+    const min = sortedValues[0]
+    const max = sortedValues[sortedValues.length - 1]
+    const uniqueValues = new Set(sortedValues)
     result.push({
       name: key,
-      type: 'unknown',
-      notEmpty: values.length,
+      type: Array.from(new Set(Array.from(uniqueValues).map((v) => typeof v))).join(', '),
+      notEmpty: sortedValues.length,
       range: {
         min: min,
         max: max,
@@ -39,7 +40,7 @@ const summary = computed(() => {
             ? uniqueValues.values().next().value
             : uniqueValues.size <= 3
               ? Array.from(uniqueValues)
-              : `From '${min.length <= 5 ? min.substring(0, 5) : min.substring(0, 5).concat('...')}' to '${max.length <= 5 ? max.substring(0, 5) : max.substring(0, 5).concat('...')}'`
+              : `From '${('' + min).length <= 5 ? ('' + min).substring(0, 5) : ('' + min).substring(0, 5).concat('...')}' to '${('' + max).length <= 5 ? ('' + max).substring(0, 5) : ('' + max).substring(0, 5).concat('...')}'`
       },
       uniqueValues: uniqueValues,
       valid: true
@@ -61,6 +62,7 @@ const summary = computed(() => {
     <br />
     <DataTable :value="summary" size="small" stripedRows>
       <Column field="name" header="Name" />
+      <Column field="type" header="Type" />
       <Column field="notEmpty" header="Has a value?">
         <template #body="slotProps">
           <PercentageComponent :total="data.rowsCount" :count="slotProps.data.notEmpty" />
