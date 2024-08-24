@@ -14,7 +14,6 @@ const data = computed(() => {
     Object.keys(parsingResults.value.data[parsingResults.value.data.length - 1]).length === 1 &&
     !parsingResults.value.data[parsingResults.value.data.length - 1][0]
   ) {
-    console.log('empty last line')
     return parsingResults.value.data.slice(0, -1)
   } else {
     return parsingResults.value.data

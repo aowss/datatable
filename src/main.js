@@ -2,7 +2,7 @@ import 'primeicons/primeicons.css'
 import './assets/main.css'
 
 import PrimeVue from 'primevue/config'
-import Aura from '@primevue/themes/aura'
+import Noir from './presets/Noir.js';
 
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -11,11 +11,11 @@ const app = createApp(App)
 
 app.use(PrimeVue, {
   theme: {
-    preset: Aura,
+    preset: Noir,
     options: {
       prefix: 'p',
-      darkModeSelector: 'system',
-      cssLayer: false
+      darkModeSelector: '.p-dark',
+      cssLayer: false,
     }
   }
 })
