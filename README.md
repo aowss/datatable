@@ -11,9 +11,13 @@ Since the result is not very convincing, a better approach might be to use custo
 
 ## Pre-requisites
 
+* [`npm`](https://docs.npmjs.com/cli/v10/commands/npm) as a package manager
+
 ## Development
 
 The project structure is based on the [`primevue-quickstart-create-vue` template](https://github.com/primefaces/primevue-examples/tree/main/vite-quickstart).
+
+We use [Husky](https://typicode.github.io/husky/) for pre-commit hooks.
 
 ## Project Setup
 
@@ -32,3 +36,4 @@ npm run dev
 ```sh
 npm run build
 ```
+
