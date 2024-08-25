@@ -2,10 +2,10 @@
 
 A [Vue 3](https://vuejs.org/) table to analyze CSV data.
 
-It uses PrimeVue's [DataTable](https://primevue.org/datatable/).
+It uses PrimeVue's [DataTable](https://primevue.org/datatable/).  
+A theme switcher is added as in [this example](https://primevue.org/datatable/#basic_filter).
 
 ## Pre-requisites
-
 
 ## Development
 
