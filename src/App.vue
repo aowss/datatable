@@ -1,6 +1,6 @@
 <script setup>
 import Analysis from '@/views/AnalysisView.vue'
-import ThemeSwitcher from "@/components/ThemeSwitcher.vue";
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 </script>
 
 <template>
