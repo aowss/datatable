@@ -1,10 +1,12 @@
 <script setup>
 import Analysis from '@/views/AnalysisView.vue'
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 </script>
 
 <template>
   <div class="main-wrapper">
     <div class="main-container">
+      <ThemeSwitcher />
       <div>
         <Analysis />
       </div>

@@ -5,7 +5,7 @@ import Column from 'primevue/column'
 import PercentageComponent from '@/components/PercentageComponent.vue'
 
 import { computed } from 'vue'
-import {formatHints, typesHint} from "@/lib/validation.js";
+import { formatHints, typesHint } from '@/lib/validation.js'
 
 const props = defineProps({
   data: {
