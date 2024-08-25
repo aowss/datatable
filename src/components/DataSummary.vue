@@ -5,6 +5,7 @@ import Column from 'primevue/column'
 import PercentageComponent from '@/components/PercentageComponent.vue'
 
 import { computed } from 'vue'
+import {formatHints, typesHint} from "@/lib/validation.js";
 
 const props = defineProps({
   data: {
@@ -30,7 +31,9 @@ const summary = computed(() => {
     const uniqueValues = new Set(sortedValues)
     result.push({
       name: key,
-      type: Array.from(new Set(Array.from(uniqueValues).map((v) => typeof v))).join(', '),
+      // type: Array.from(new Set(Array.from(uniqueValues).map((v) => typeof v))).join(', '),
+      type: typesHint(uniqueValues),
+      format: formatHints(uniqueValues),
       notEmpty: sortedValues.length,
       range: {
         min: min,
@@ -63,6 +66,7 @@ const summary = computed(() => {
     <DataTable :value="summary" size="small" stripedRows>
       <Column field="name" header="Name" />
       <Column field="type" header="Type" />
+      <Column field="format" header="Format" />
       <Column field="notEmpty" header="Has a value?">
         <template #body="slotProps">
           <PercentageComponent :total="data.rowsCount" :count="slotProps.data.notEmpty" />

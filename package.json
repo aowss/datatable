@@ -11,10 +11,11 @@
     },
     "dependencies": {
         "@primevue/themes": "^4.0.4",
+        "papaparse": "^5.4.1",
         "primeicons": "^7.0.0",
         "primevue": "^4.0.4",
-        "vue": "^3.4.38",
-        "papaparse": "^5.4.1"
+        "validator": "^13.12.0",
+        "vue": "^3.4.38"
     },
     "devDependencies": {
         "@rushstack/eslint-patch": "^1.10.4",
