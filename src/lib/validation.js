@@ -47,7 +47,7 @@ const formatHint = (value) => {
         hints.push(hint)
       }
     } catch (error) {
-      console.error(`Error trying to figure out the format of ${value}: ${error.message}`)
+      // console.error(`Error trying to figure out the format of ${value}: ${error.message}`)
     }
   }
   if (hints.length === 0) hints.push('n/a')

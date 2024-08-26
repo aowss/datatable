@@ -65,8 +65,11 @@ const summary = computed(() => {
     <br />
     <DataTable :value="summary" size="small" stripedRows>
       <Column field="name" header="Name" />
-      <Column field="type" header="Type" />
-      <Column field="format" header="Format" />
+      <Column field="type" header="Type">
+        <template #body="{ data }">
+          <Tag :value="data.type" v-tooltip="data.format" />
+        </template>
+      </Column>
       <Column field="notEmpty" header="Has a value?">
         <template #body="slotProps">
           <PercentageComponent :total="data.rowsCount" :count="slotProps.data.notEmpty" />
