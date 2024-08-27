@@ -4,8 +4,9 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import PercentageComponent from '@/components/PercentageComponent.vue'
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { formatHints, typesHint } from '@/lib/validation.js'
+import ValidationDialog from '@/components/ValidationDialog.vue'
 
 const props = defineProps({
   data: {
@@ -31,7 +32,6 @@ const summary = computed(() => {
     const uniqueValues = new Set(sortedValues)
     result.push({
       name: key,
-      // type: Array.from(new Set(Array.from(uniqueValues).map((v) => typeof v))).join(', '),
       type: typesHint(uniqueValues),
       format: formatHints(uniqueValues),
       notEmpty: sortedValues.length,
@@ -51,6 +51,8 @@ const summary = computed(() => {
   }
   return result
 })
+
+const dialogOpen = ref(false)
 </script>
 
 <template>
@@ -79,6 +81,25 @@ const summary = computed(() => {
       <Column field="unique" header="Unique Values">
         <template #body="slotProps">
           <PercentageComponent :total="data.rowsCount" :count="slotProps.data.uniqueValues.size" />
+        </template>
+      </Column>
+      <Column header="Valid">
+        <template #body="slotProps">
+          <Button
+            type="button"
+            icon="pi pi-check"
+            severity="contrast"
+            outlined
+            size="small"
+            label="Validate"
+            @click="dialogOpen = true"
+          />
+          <ValidationDialog
+            :dialogOpen="dialogOpen"
+            :type="slotProps.data.type.split(',')[0]"
+            @toggle="(value) => (dialogOpen = value)"
+            modal
+          />
         </template>
       </Column>
     </DataTable>
