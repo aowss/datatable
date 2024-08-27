@@ -26,8 +26,8 @@ const columns = computed(() =>
       sortMode="multiple"
       removableSort
       paginator
-      :rows="50"
-      :rowsPerPageOptions="[10, 50, 100]"
+      :rows="5"
+      :rowsPerPageOptions="[5, 10, 50, 100]"
     >
       <template #empty> No data. </template>
       <template #loading> Loading data. Please wait. </template>
