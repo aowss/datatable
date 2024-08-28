@@ -5,7 +5,7 @@ import Column from 'primevue/column'
 import PercentageComponent from '@/components/PercentageComponent.vue'
 
 import { computed, ref } from 'vue'
-import { formatHints, typesHint } from '@/lib/validation.js'
+import { formatHints, typesHint, validateAll } from '@/lib/validation.js'
 import ValidationDialog from '@/components/ValidationDialog.vue'
 
 const props = defineProps({
@@ -46,23 +46,27 @@ const summary = computed(() => {
               : `From '${('' + min).length <= 5 ? ('' + min).substring(0, 5) : ('' + min).substring(0, 5).concat('...')}' to '${('' + max).length <= 5 ? ('' + max).substring(0, 5) : ('' + max).substring(0, 5).concat('...')}'`
       },
       uniqueValues: uniqueValues,
-      valid: true
+      validValues: validateAll(uniqueValues, validationCode.value)
     })
   }
   return result
 })
 
 const dialogOpen = ref(false)
+const validationCode = ref()
+const readyToValidate = ref(false)
+
+const setCode = (code) => {
+  console.log('code', code)
+  validationCode.value = new Function(code)
+  readyToValidate.value = true
+}
 </script>
 
 <template>
   <div>
-    <Tag icon="pi pi-bars" severity="contrast" :value="`Row Count: ${data.rowsCount}`"></Tag> &nbsp;
-    <Tag
-      icon="pi pi-arrows-h"
-      severity="contrast"
-      :value="`Column Count: ${data.columnsCount}`"
-    ></Tag>
+    <Tag icon="pi pi-bars" severity="contrast" :value="`Row Count: ${data.rowsCount}`" /> &nbsp;
+    <Tag icon="pi pi-arrows-h" severity="contrast" :value="`Column Count: ${data.columnsCount}`" />
     &nbsp;
     <br />
     <DataTable :value="summary" size="small" stripedRows>
@@ -83,22 +87,33 @@ const dialogOpen = ref(false)
           <PercentageComponent :total="data.rowsCount" :count="slotProps.data.uniqueValues.size" />
         </template>
       </Column>
-      <Column header="Valid">
+      <Column header="Validation">
         <template #body="slotProps">
           <Button
             type="button"
-            icon="pi pi-check"
+            icon="pi pi-cog"
             severity="contrast"
             outlined
             size="small"
-            label="Validate"
+            label="Configure"
             @click="dialogOpen = true"
           />
+          &nbsp;
           <ValidationDialog
             :dialogOpen="dialogOpen"
             :type="slotProps.data.type.split(',')[0]"
+            :name="slotProps.data.name"
             @toggle="(value) => (dialogOpen = value)"
-            modal
+            @save="(code) => setCode(code)"
+          />
+        </template>
+      </Column>
+      <Column header="Valid">
+        <template #body="slotProps">
+          <PercentageComponent
+            v-if="readyToValidate"
+            :total="slotProps.data.uniqueValues.size"
+            :count="slotProps.data.validValues.length"
           />
         </template>
       </Column>

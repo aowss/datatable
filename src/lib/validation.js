@@ -53,3 +53,13 @@ const formatHint = (value) => {
   if (hints.length === 0) hints.push('n/a')
   return hints
 }
+
+export const validateAll = (values, validationFunction) => {
+  console.log('validateAll', values, validationFunction)
+  if (!validationFunction) return new Set()
+  const input = values instanceof Set ? Array.from(values) : values
+  const validateValue = validate(validationFunction)
+  return input.map(validateValue)
+}
+
+const validate = (validationFunction) => (value) => validationFunction.apply(value)

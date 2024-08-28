@@ -2,6 +2,10 @@
 import { ref } from 'vue'
 
 const props = defineProps({
+  name: {
+    type: String,
+    required: true
+  },
   type: {
     type: String,
     required: true,
@@ -14,45 +18,42 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'save'])
 
-function setIsOpened(value) {
-  emit('toggle', value)
+function cancel() {
+  emit('toggle', false)
 }
 
-const patternFilter = ref(false)
-const pattern = ref('')
-const apiFilter = ref(false)
-const url = ref('')
+const code = ref('')
+function save() {
+  emit('save', code.value)
+  emit('toggle', false)
+}
 </script>
 
 <template>
-  <Dialog
-    :visible="props.dialogOpen"
-    modal
-    header="Configure Validation"
-    :style="{ width: '25rem' }"
-  >
-    <InputGroup>
-      <InputGroupAddon>
-        <Checkbox v-model="patternFilter" :binary="true" />
-      </InputGroupAddon>
-      <InputText id="pattern" v-model="pattern" placeholder="Pattern" />
-    </InputGroup>
-    <InputGroup>
-      <InputGroupAddon>
-        <Checkbox v-model="apiFilter" :binary="true" />
-      </InputGroupAddon>
-      <InputText id="url" v-model="url" placeholder="URL" />
-    </InputGroup>
+  <Dialog :visible="props.dialogOpen" modal header="Configure Validation">
+    <div class="flex flex-col gap-2">
+      <label for="code"
+        >Predicate function to validate the value of <code>{{ props.name }}</code></label
+      >
+      <Textarea
+        id="code"
+        v-model="code"
+        rows="5"
+        cols="30"
+        aria-describedby="code-help"
+        placeholder="return value.startsWith('A')"
+      />
+      <small id="code-help">
+        Write the body of the function which signature is: <br />
+        <code>async function(value: {{ props.type }}): boolean</code> <br />
+        Note that the function will only apply to the rows that have a value.
+      </small>
+    </div>
     <div class="flex justify-end gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        severity="secondary"
-        @click="setIsOpened(false)"
-      ></Button>
-      <Button type="button" label="Save" @click="setIsOpened(false)"></Button>
+      <Button type="button" label="Cancel" severity="secondary" @click="cancel"></Button>
+      <Button type="button" label="Save" @click="save"></Button>
     </div>
   </Dialog>
 </template>
