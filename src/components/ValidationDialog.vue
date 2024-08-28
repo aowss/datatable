@@ -26,8 +26,8 @@ function cancel() {
 
 const code = ref('')
 function save() {
-  emit('save', code.value)
   emit('toggle', false)
+  emit('save', code.value)
 }
 </script>
 

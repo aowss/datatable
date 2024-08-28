@@ -55,11 +55,16 @@ const formatHint = (value) => {
 }
 
 export const validateAll = (values, validationFunction) => {
-  console.log('validateAll', values, validationFunction)
   if (!validationFunction) return new Set()
   const input = values instanceof Set ? Array.from(values) : values
   const validateValue = validate(validationFunction)
-  return input.map(validateValue)
+  const result = input.map(validateValue)
+  console.log('result', result)
+  return result
 }
 
-const validate = (validationFunction) => (value) => validationFunction.apply(value)
+const validate = (validationFunction) => (value) => {
+  const result = validationFunction.apply(null, [value])
+  console.log('value', value, '=> result', result)
+  return result
+}

@@ -58,7 +58,7 @@ const readyToValidate = ref(false)
 
 const setCode = (code) => {
   console.log('code', code)
-  validationCode.value = new Function(code)
+  validationCode.value = new Function('value', code)
   readyToValidate.value = true
 }
 </script>
