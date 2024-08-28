@@ -1,10 +1,9 @@
 <script setup>
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
 import { computed } from 'vue'
 
 const props = defineProps({
   data: {
+    type: Array,
     required: true
   }
 })

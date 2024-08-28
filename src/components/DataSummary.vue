@@ -1,15 +1,12 @@
 <script setup>
-import Tag from 'primevue/tag'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import PercentageComponent from '@/components/PercentageComponent.vue'
-
 import { computed, ref } from 'vue'
 import { formatHints, typesHint, validateAll } from '@/lib/validation.js'
 import ValidationDialog from '@/components/ValidationDialog.vue'
+import PercentageComponent from '@/components/PercentageComponent.vue'
 
 const props = defineProps({
   data: {
+    type: Object,
     required: true
   }
 })

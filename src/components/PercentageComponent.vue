@@ -1,12 +1,13 @@
 <script setup>
-import ProgressBar from 'primevue/progressbar'
 import { computed } from 'vue'
 
 const props = defineProps({
   count: {
+    type: Number,
     required: true
   },
   total: {
+    type: Number,
     required: true
   }
 })

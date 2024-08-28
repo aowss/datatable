@@ -65,6 +65,6 @@ export const validateAll = (values, validationFunction) => {
 
 const validate = (validationFunction) => (value) => {
   const result = validationFunction.apply(null, [value])
-  console.log('value', value, '=> result', result)
+  // console.log('value', value, '=> result', result)
   return result
 }

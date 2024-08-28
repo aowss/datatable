@@ -1,10 +1,9 @@
 <script setup>
-import Tag from 'primevue/tag'
-
 import { computed } from 'vue'
 
 const props = defineProps({
   fileDetails: {
+    type: Object,
     required: true
   }
 })
