@@ -110,7 +110,7 @@ const setCode = (code) => {
           <PercentageComponent
             v-if="readyToValidate"
             :total="slotProps.data.uniqueValues.size"
-            :count="slotProps.data.validValues.length"
+            :count="slotProps.data.validValues.filter((result) => result === true).length"
           />
         </template>
       </Column>
