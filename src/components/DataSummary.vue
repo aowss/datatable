@@ -1,7 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { formatHints, typesHint, validateAll } from '@/lib/validation.js'
-import ValidationDialog from '@/components/ValidationDialog.vue'
 import PercentageComponent from '@/components/PercentageComponent.vue'
 
 const props = defineProps({
@@ -11,9 +10,9 @@ const props = defineProps({
   }
 })
 
-const summary = computed(() => {
+const summarize = (data) => {
   const result = []
-  const dataByKey = props.data.values.reduce((acc, cur) => {
+  const dataByKey = data.values.reduce((acc, cur) => {
     for (const [key, value] of Object.entries(cur)) {
       if (!acc[key]) acc[key] = []
       acc[key].push(value)
@@ -43,20 +42,31 @@ const summary = computed(() => {
               : `From '${('' + min).length <= 5 ? ('' + min).substring(0, 5) : ('' + min).substring(0, 5).concat('...')}' to '${('' + max).length <= 5 ? ('' + max).substring(0, 5) : ('' + max).substring(0, 5).concat('...')}'`
       },
       uniqueValues: uniqueValues,
-      validValues: validateAll(uniqueValues, validationCode.value)
+      validationCode: '',
+      validValues: []
     })
   }
   return result
-})
+}
 
-const dialogOpen = ref(false)
-const validationCode = ref()
+const summary = ref(summarize(props.data))
+
 const readyToValidate = ref(false)
 
-const setCode = (code) => {
-  console.log('code', code)
-  validationCode.value = new Function('value', code)
-  readyToValidate.value = true
+const onCellEditComplete = (event) => {
+  let { data, newValue, value, field } = event
+  if (
+    field === 'validationCode' &&
+    newValue.trim().length > 0 &&
+    newValue.trim() !== value.trim()
+  ) {
+    data['validationCode'] = newValue
+    readyToValidate.value = true
+    data['validValues'] = validateAll(
+      data['uniqueValues'],
+      new Function('value', data['validationCode'])
+    )
+  } else event.preventDefault()
 }
 </script>
 
@@ -66,7 +76,13 @@ const setCode = (code) => {
     <Tag icon="pi pi-arrows-h" severity="contrast" :value="`Column Count: ${data.columnsCount}`" />
     &nbsp;
     <br />
-    <DataTable :value="summary" size="small" stripedRows>
+    <DataTable
+      :value="summary"
+      size="small"
+      stripedRows
+      editMode="cell"
+      @cell-edit-complete="onCellEditComplete"
+    >
       <Column field="name" header="Name" />
       <Column field="type" header="Type">
         <template #body="{ data }">
@@ -84,24 +100,17 @@ const setCode = (code) => {
           <PercentageComponent :total="data.rowsCount" :count="slotProps.data.uniqueValues.size" />
         </template>
       </Column>
-      <Column header="Validation">
-        <template #body="slotProps">
-          <Button
-            type="button"
-            icon="pi pi-cog"
-            severity="contrast"
-            outlined
-            size="small"
-            label="Configure"
-            @click="dialogOpen = true"
-          />
-          &nbsp;
-          <ValidationDialog
-            :dialogOpen="dialogOpen"
-            :type="slotProps.data.type.split(',')[0]"
-            :name="slotProps.data.name"
-            @toggle="(value) => (dialogOpen = value)"
-            @save="(code) => setCode(code)"
+      <Column field="validationCode" header="Validation Code">
+        <template #editor="{ data, field }">
+          <Textarea
+            id="code"
+            v-model="data[field]"
+            variant="filled"
+            autoResize
+            rows="1"
+            cols="30"
+            :placeholder="`return value.startsWith('A') // signature: function(value: ${data.type}): boolean`"
+            fluid
           />
         </template>
       </Column>
