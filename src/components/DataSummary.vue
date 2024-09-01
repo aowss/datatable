@@ -10,8 +10,6 @@ const props = defineProps({
   }
 })
 
-const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
-
 const rangeLabel = (min, max, uniqueValues) =>
   uniqueValues.size === 1
     ? uniqueValues.values().next().value
@@ -66,8 +64,9 @@ const onCellEditComplete = (event) => {
   ) {
     data['validationCode'] = newValue
     readyToValidate.value = true
-    const asyncFn = new AsyncFunction('value', data['validationCode'])
-    validateAll(data['uniqueValues'], asyncFn).then((values) => (data['validValues'] = values))
+    validateAll(data['uniqueValues'], data['validationCode']).then(
+      (values) => (data['validValues'] = values)
+    )
   } else event.preventDefault()
 }
 </script>

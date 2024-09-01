@@ -54,8 +54,11 @@ const formatHint = (value) => {
   return hints
 }
 
-export const validateAll = async (values, validationFunction) => {
-  if (!validationFunction) return new Set()
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
+
+export const validateAll = async (values, validationCode) => {
+  if (!validationCode) return new Set()
+  const validationFunction = new AsyncFunction('value', validationCode)
   const input = values instanceof Set ? Array.from(values) : values
   const validateValue = validate(validationFunction)
   return Promise.all(input.map(validateValue))
