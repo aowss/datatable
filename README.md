@@ -41,7 +41,7 @@ npm run build
 
 ### Data Summary
 
-![](Data Summary.png)
+![](./docs/Data-Summary.png)
 
 * At start the `Validation Code` & `Valid` columns are empty.  
 See [Validation](#validation) below for details of how to use the validation feature.
@@ -97,4 +97,4 @@ try {
 
 ### Theme Switching
 
-![](Theme Switcher.png)
+![](./docs/Theme-Switcher.png)
