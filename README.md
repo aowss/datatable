@@ -66,6 +66,13 @@ return isString && isF1
 ```
 
 * The function can be asynchronous  
+
+```javascript
+return fetch('https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch', { mode: 'cors' })
+    .then((response) => !response.ok)
+    .catch((e) => true)
+```
+
 * The function can use `await`
 
 ```javascript
