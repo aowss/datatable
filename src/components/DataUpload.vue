@@ -7,18 +7,18 @@ const emit = defineEmits(['fileSelected', 'dataUploaded'])
 const uploading = ref(false)
 const parsingResults = ref()
 
+const emptyLastRow = (data) =>
+  data[data.length - 1] !== undefined &&
+  Object.keys(data[data.length - 1]).length === 1 &&
+  !data[data.length - 1][0]
+
 const data = computed(() => {
   if (!parsingResults.value) return undefined
-  if (
-    parsingResults.value.data[parsingResults.value.data.length - 1] !== undefined &&
-    Object.keys(parsingResults.value.data[parsingResults.value.data.length - 1]).length === 1 &&
-    !parsingResults.value.data[parsingResults.value.data.length - 1][0]
-  ) {
-    return parsingResults.value.data.slice(0, -1)
-  } else {
-    return parsingResults.value.data
-  }
+  const data = parsingResults.value.data
+  if (emptyLastRow(data)) return data.slice(0, -1)
+  else return data
 })
+
 const rowsCount = computed(() => data.value.length)
 const columnsCount = computed(() => parsingResults.value.meta.fields.length)
 
