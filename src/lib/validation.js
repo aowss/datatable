@@ -54,12 +54,11 @@ const formatHint = (value) => {
   return hints
 }
 
-export const validateAll = (values, validationFunction) => {
+export const validateAll = async (values, validationFunction) => {
   if (!validationFunction) return new Set()
   const input = values instanceof Set ? Array.from(values) : values
   const validateValue = validate(validationFunction)
-  const result = input.map(validateValue)
-  return result
+  return Promise.all(input.map(validateValue))
 }
 
-const validate = (validationFunction) => (value) => validationFunction.apply(null, [value])
+const validate = (validationFunction) => async (value) => validationFunction.apply(null, [value])

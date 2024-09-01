@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { formatHints, typesHint, validateAll } from '@/lib/validation.js'
 import PercentageComponent from '@/components/PercentageComponent.vue'
 
@@ -9,6 +9,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
 
 const summarize = (data) => {
   const result = []
@@ -49,7 +51,7 @@ const summarize = (data) => {
   return result
 }
 
-const summary = ref(summarize(props.data))
+const summary = reactive(summarize(props.data))
 
 const readyToValidate = ref(false)
 
@@ -62,10 +64,8 @@ const onCellEditComplete = (event) => {
   ) {
     data['validationCode'] = newValue
     readyToValidate.value = true
-    data['validValues'] = validateAll(
-      data['uniqueValues'],
-      new Function('value', data['validationCode'])
-    )
+    const asyncFn = new AsyncFunction('value', data['validationCode'])
+    validateAll(data['uniqueValues'], asyncFn).then((values) => (data['validValues'] = values))
   } else event.preventDefault()
 }
 </script>
@@ -107,9 +107,9 @@ const onCellEditComplete = (event) => {
             v-model="data[field]"
             variant="filled"
             autoResize
-            rows="1"
+            rows="2"
             cols="30"
-            :placeholder="`return value.startsWith('A') // signature: function(value: ${data.type}): boolean`"
+            :placeholder="`return value.startsWith('A') // signature: async function(value: ${data.type.replace(',', ' |')}): boolean`"
             fluid
           />
         </template>
